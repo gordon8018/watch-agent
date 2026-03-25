@@ -32,7 +32,7 @@ class SummaryBar(Widget):
         yield Label("", id="title-row")
         yield ScrollableContainer(Horizontal(id="badges-inner"), id="badges")
 
-    def refresh_states(self, states: list[AgentState]) -> None:
+    async def refresh_states(self, states: list[AgentState]) -> None:
         self._states = states
         running = sum(1 for s in states if s.status == "running")
         errors = sum(1 for s in states if s.status == "error")
@@ -42,6 +42,6 @@ class SummaryBar(Widget):
             f"[green]运行: {running}[/green]  [red]错误: {errors}[/red]"
         )
         inner = self.query_one("#badges-inner", Horizontal)
-        inner.remove_children()
+        await inner.remove_children()
         for state in states:
-            inner.mount(AgentBadge(state, id=f"badge-{state.id}"))
+            await inner.mount(AgentBadge(state, id=f"badge-{state.id}"))

@@ -26,10 +26,10 @@ class WatchApp(App):
     def on_mount(self) -> None:
         self.set_interval(REFRESH_INTERVAL, self._tick)
 
-    def _tick(self) -> None:
+    async def _tick(self) -> None:
         self._states = self._manager.refresh()
         summary = self.query_one("#summary", SummaryBar)
-        summary.refresh_states(self._states)
+        await summary.refresh_states(self._states)
 
         detail = self.query_one("#detail", AgentDetailPanel)
         target = self._select_detail_agent()

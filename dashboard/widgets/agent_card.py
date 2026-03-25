@@ -23,7 +23,7 @@ class AgentDetailPanel(Widget):
     }
     """
 
-    state: reactive[AgentState | None] = reactive(None, recompose=True)
+    state: reactive[AgentState | None] = reactive(None)
 
     def __init__(self, agent_state: AgentState | None = None, **kwargs) -> None:
         super().__init__(**kwargs)

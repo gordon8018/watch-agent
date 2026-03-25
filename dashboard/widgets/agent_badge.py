@@ -27,7 +27,7 @@ class AgentBadge(Widget):
     }
     """
 
-    state: reactive[AgentState] = reactive(None, recompose=True)
+    state: reactive[AgentState | None] = reactive(None, recompose=True)
 
     def __init__(self, agent_state: AgentState, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -35,11 +35,15 @@ class AgentBadge(Widget):
 
     def render_text(self) -> str:
         """返回可测试的纯文本表示。"""
+        if self.state is None:
+            return "? loading\nunknown\n"
         icon = STATUS_ICONS.get(self.state.status, "?")
         task_preview = self.state.task[:14] + "…" if len(self.state.task) > 15 else self.state.task
         return f"{icon} {self.state.name}\n{self.state.status}\n{task_preview}"
 
     def render(self) -> RenderResult:
+        if self.state is None:
+            return Text("?")
         icon = STATUS_ICONS.get(self.state.status, "?")
         text = Text()
         text.append(f"{icon} ", style=self.state.status_color)
