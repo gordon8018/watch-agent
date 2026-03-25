@@ -29,7 +29,7 @@ def test_linger_keeps_missing_agent():
     old_state.last_updated = datetime.now() - timedelta(seconds=10)
     mgr._previous: dict[str, AgentState] = {"a1": old_state}
 
-    result = mgr._apply_linger(current_ids=set(), all_states=[])
+    result = mgr._apply_linger(current_ids=set())
     assert len(result) == 1
     assert result[0].id == "a1"
 
@@ -41,5 +41,5 @@ def test_linger_removes_expired_agent():
     old_state.last_updated = datetime.now() - timedelta(seconds=60)
     mgr._previous = {"a1": old_state}
 
-    result = mgr._apply_linger(current_ids=set(), all_states=[])
+    result = mgr._apply_linger(current_ids=set())
     assert result == []

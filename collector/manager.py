@@ -20,6 +20,8 @@ class CollectorManager:
         file_states = self._file.collect()
         panes = self._tmux.list_panes()
 
+        # tmux pane title 必须与 agent status 文件中的 id 字段相同，才能完成匹配。
+        # 约定：agent 应将其 tmux 窗格标题设为 agent id（与状态文件名 agent-{id}.json 一致）。
         tmux_logs: dict[str, list[str]] = {}
         tmux_metrics: dict[str, tuple[float, float]] = {}
         for pane in panes:
@@ -31,7 +33,7 @@ class CollectorManager:
 
         merged = self._merge(file_states, tmux_logs, tmux_metrics)
         current_ids = {s.id for s in merged}
-        lingered = self._apply_linger(current_ids, merged)
+        lingered = self._apply_linger(current_ids)
         all_states = merged + lingered
 
         self._previous = {s.id: s for s in all_states}
@@ -53,7 +55,6 @@ class CollectorManager:
     def _apply_linger(
         self,
         current_ids: set[str],
-        all_states: list[AgentState],
     ) -> list[AgentState]:
         lingered = []
         now = datetime.now()
