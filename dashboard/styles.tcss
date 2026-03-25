@@ -1,0 +1,13 @@
+/* dashboard/styles.tcss */
+Screen {
+    background: $surface;
+    layout: vertical;
+}
+
+#summary {
+    height: 6;
+}
+
+#detail {
+    height: 1fr;
+}
