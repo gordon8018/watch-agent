@@ -1,6 +1,4 @@
 import json
-import os
-import tempfile
 from collector.file_collector import FileCollector
 
 
